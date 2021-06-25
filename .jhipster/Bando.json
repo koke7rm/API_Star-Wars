@@ -1,0 +1,41 @@
+{
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "logo",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "image"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "integrantes",
+      "otherEntityName": "personaje",
+      "relationshipType": "many-to-one",
+      "otherEntityField": "nombre"
+    },
+    {
+      "relationshipName": "ganador",
+      "otherEntityName": "batalla",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "ganador"
+    },
+    {
+      "relationshipName": "perdedor",
+      "otherEntityName": "batalla",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "perdedor"
+    }
+  ],
+  "service": "serviceClass",
+  "dto": "no",
+  "jpaMetamodelFiltering": false,
+  "readOnly": false,
+  "pagination": "no",
+  "name": "Bando",
+  "changelogDate": "20210616152333"
+}

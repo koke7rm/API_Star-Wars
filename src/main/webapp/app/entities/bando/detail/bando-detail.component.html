@@ -1,0 +1,47 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="bando">
+      <h2 data-cy="bandoDetailsHeading"><span>Bando</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ bando.id }}</span>
+        </dd>
+        <dt><span>Nombre</span></dt>
+        <dd>
+          <span>{{ bando.nombre }}</span>
+        </dd>
+        <dt><span>Logo</span></dt>
+        <dd>
+          <div *ngIf="bando.logo">
+            <a (click)="openFile(bando.logo, bando.logoContentType)">
+              <img [src]="'data:' + bando.logoContentType + ';base64,' + bando.logo" style="max-width: 100%" alt="bando image" />
+            </a>
+            {{ bando.logoContentType }}, {{ byteSize(bando.logo) }}
+          </div>
+        </dd>
+        <dt><span>Integrantes</span></dt>
+        <dd>
+          <div *ngIf="bando.integrantes">
+            <a [routerLink]="['/personaje', bando.integrantes?.id, 'view']">{{ bando.integrantes?.nombre }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/bando', bando.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+{
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "edad",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "rango",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "especie",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "personajes",
+      "otherEntityName": "pelicula",
+      "relationshipType": "many-to-many",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "personajes"
+    },
+    {
+      "relationshipName": "integrantes",
+      "otherEntityName": "bando",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "integrantes"
+    },
+    {
+      "relationshipName": "involucrados",
+      "otherEntityName": "batalla",
+      "relationshipType": "many-to-many",
+      "ownerSide": false,
+      "otherEntityRelationshipName": "involucrados"
+    }
+  ],
+  "service": "serviceClass",
+  "dto": "no",
+  "jpaMetamodelFiltering": false,
+  "readOnly": false,
+  "pagination": "no",
+  "name": "Personaje",
+  "changelogDate": "20210616152031"
+}

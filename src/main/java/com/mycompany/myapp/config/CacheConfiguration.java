@@ -48,6 +48,18 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.domain.User.class.getName());
             createCache(cm, com.mycompany.myapp.domain.Authority.class.getName());
             createCache(cm, com.mycompany.myapp.domain.User.class.getName() + ".authorities");
+            createCache(cm, com.mycompany.myapp.domain.Personaje.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Pelicula.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Bando.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Batalla.class.getName());
+            createCache(cm, com.mycompany.myapp.domain.Pelicula.class.getName() + ".personajes");
+            createCache(cm, com.mycompany.myapp.domain.Batalla.class.getName() + ".involucrados");
+            createCache(cm, com.mycompany.myapp.domain.Personaje.class.getName() + ".personajes");
+            createCache(cm, com.mycompany.myapp.domain.Personaje.class.getName() + ".integrantes");
+            createCache(cm, com.mycompany.myapp.domain.Personaje.class.getName() + ".involucrados");
+            createCache(cm, com.mycompany.myapp.domain.Pelicula.class.getName() + ".batallas");
+            createCache(cm, com.mycompany.myapp.domain.Bando.class.getName() + ".ganadors");
+            createCache(cm, com.mycompany.myapp.domain.Bando.class.getName() + ".perdedors");
             // jhipster-needle-ehcache-add-entry
         };
     }

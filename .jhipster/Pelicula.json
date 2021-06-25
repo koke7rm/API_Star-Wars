@@ -1,0 +1,40 @@
+{
+  "fields": [
+    {
+      "fieldName": "titulo",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique"]
+    },
+    {
+      "fieldName": "episodio",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "estreno",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipName": "personajes",
+      "otherEntityName": "personaje",
+      "relationshipType": "many-to-many",
+      "otherEntityField": "nombre",
+      "ownerSide": true,
+      "otherEntityRelationshipName": "personajes"
+    },
+    {
+      "relationshipName": "batalla",
+      "otherEntityName": "batalla",
+      "relationshipType": "one-to-many",
+      "otherEntityRelationshipName": "pelicula"
+    }
+  ],
+  "service": "serviceClass",
+  "dto": "no",
+  "jpaMetamodelFiltering": false,
+  "readOnly": false,
+  "pagination": "no",
+  "name": "Pelicula",
+  "changelogDate": "20210616152220"
+}

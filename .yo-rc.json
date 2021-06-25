@@ -41,6 +41,8 @@
     "jwtSecretKey": "NzA3M2IzOWM1YzM1YThjYzBhNDcyN2MzMTQyMmVmNzU3ZGZiYjNmMWNmZWRkMzc4YTE5OTJjZmVkZGMyYzgzMjZjNzQ4YzczMTFmZjczMzA0NTk5ZTlhNGI1M2U5ZTg0YjA5MDI4ZjEyYTNhNzlmZjc1ZWQzNmIzOTlkMDM0ZmI=",
     "clientPackageManager": "npm",
     "clientThemeVariant": "",
-    "languages": ["en", "fr"]
+    "languages": ["en", "fr"],
+    "lastLiquibaseTimestamp": 1623857094000,
+    "entities": ["Personaje", "Pelicula", "Bando", "Batalla"]
   }
 }

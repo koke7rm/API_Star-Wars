@@ -1,0 +1,152 @@
+import { Component, OnInit, ElementRef } from '@angular/core';
+import { HttpResponse } from '@angular/common/http';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { finalize, map } from 'rxjs/operators';
+
+import { IBando, Bando } from '../bando.model';
+import { BandoService } from '../service/bando.service';
+import { AlertError } from 'app/shared/alert/alert-error.model';
+import { EventManager, EventWithContent } from 'app/core/util/event-manager.service';
+import { DataUtils, FileLoadError } from 'app/core/util/data-util.service';
+import { IPersonaje } from 'app/entities/personaje/personaje.model';
+import { PersonajeService } from 'app/entities/personaje/service/personaje.service';
+
+@Component({
+  selector: 'jhi-bando-update',
+  templateUrl: './bando-update.component.html',
+})
+export class BandoUpdateComponent implements OnInit {
+  isSaving = false;
+
+  personajesSharedCollection: IPersonaje[] = [];
+
+  editForm = this.fb.group({
+    id: [],
+    nombre: [null, []],
+    logo: [],
+    logoContentType: [],
+    integrantes: [],
+  });
+
+  constructor(
+    protected dataUtils: DataUtils,
+    protected eventManager: EventManager,
+    protected bandoService: BandoService,
+    protected personajeService: PersonajeService,
+    protected elementRef: ElementRef,
+    protected activatedRoute: ActivatedRoute,
+    protected fb: FormBuilder
+  ) {}
+
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ bando }) => {
+      this.updateForm(bando);
+
+      this.loadRelationshipsOptions();
+    });
+  }
+
+  byteSize(base64String: string): string {
+    return this.dataUtils.byteSize(base64String);
+  }
+
+  openFile(base64String: string, contentType: string | null | undefined): void {
+    this.dataUtils.openFile(base64String, contentType);
+  }
+
+  setFileData(event: Event, field: string, isImage: boolean): void {
+    this.dataUtils.loadFileToForm(event, this.editForm, field, isImage).subscribe({
+      error: (err: FileLoadError) =>
+        this.eventManager.broadcast(
+          new EventWithContent<AlertError>('apiStarWarsApp.error', { message: err.message })
+        ),
+    });
+  }
+
+  clearInputImage(field: string, fieldContentType: string, idInput: string): void {
+    this.editForm.patchValue({
+      [field]: null,
+      [fieldContentType]: null,
+    });
+    if (idInput && this.elementRef.nativeElement.querySelector('#' + idInput)) {
+      this.elementRef.nativeElement.querySelector('#' + idInput).value = null;
+    }
+  }
+
+  previousState(): void {
+    window.history.back();
+  }
+
+  save(): void {
+    this.isSaving = true;
+    const bando = this.createFromForm();
+    if (bando.id !== undefined) {
+      this.subscribeToSaveResponse(this.bandoService.update(bando));
+    } else {
+      this.subscribeToSaveResponse(this.bandoService.create(bando));
+    }
+  }
+
+  trackPersonajeById(index: number, item: IPersonaje): number {
+    return item.id!;
+  }
+
+  protected subscribeToSaveResponse(result: Observable<HttpResponse<IBando>>): void {
+    result.pipe(finalize(() => this.onSaveFinalize())).subscribe(
+      () => this.onSaveSuccess(),
+      () => this.onSaveError()
+    );
+  }
+
+  protected onSaveSuccess(): void {
+    this.previousState();
+  }
+
+  protected onSaveError(): void {
+    // Api for inheritance.
+  }
+
+  protected onSaveFinalize(): void {
+    this.isSaving = false;
+  }
+
+  protected updateForm(bando: IBando): void {
+    this.editForm.patchValue({
+      id: bando.id,
+      nombre: bando.nombre,
+      logo: bando.logo,
+      logoContentType: bando.logoContentType,
+      integrantes: bando.integrantes,
+    });
+
+    this.personajesSharedCollection = this.personajeService.addPersonajeToCollectionIfMissing(
+      this.personajesSharedCollection,
+      bando.integrantes
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.personajeService
+      .query()
+      .pipe(map((res: HttpResponse<IPersonaje[]>) => res.body ?? []))
+      .pipe(
+        map((personajes: IPersonaje[]) =>
+          this.personajeService.addPersonajeToCollectionIfMissing(personajes, this.editForm.get('integrantes')!.value)
+        )
+      )
+      .subscribe((personajes: IPersonaje[]) => (this.personajesSharedCollection = personajes));
+  }
+
+  protected createFromForm(): IBando {
+    return {
+      ...new Bando(),
+      id: this.editForm.get(['id'])!.value,
+      nombre: this.editForm.get(['nombre'])!.value,
+      logoContentType: this.editForm.get(['logoContentType'])!.value,
+      logo: this.editForm.get(['logo'])!.value,
+      integrantes: this.editForm.get(['integrantes'])!.value,
+    };
+  }
+}

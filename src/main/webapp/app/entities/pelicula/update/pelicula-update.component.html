@@ -1,0 +1,74 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-pelicula-heading" data-cy="PeliculaCreateUpdateHeading">Create or edit a Pelicula</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_titulo">Titulo</label>
+          <input type="text" class="form-control" name="titulo" id="field_titulo" data-cy="titulo" formControlName="titulo" />
+          <div *ngIf="editForm.get('titulo')!.invalid && (editForm.get('titulo')!.dirty || editForm.get('titulo')!.touched)"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_episodio">Episodio</label>
+          <input type="number" class="form-control" name="episodio" id="field_episodio" data-cy="episodio" formControlName="episodio" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_estreno">Estreno</label>
+          <div class="input-group">
+            <input
+              id="field_estreno"
+              data-cy="estreno"
+              type="text"
+              class="form-control"
+              name="estreno"
+              ngbDatepicker
+              #estrenoDp="ngbDatepicker"
+              formControlName="estreno"
+            />
+            <span class="input-group-append">
+              <button type="button" class="btn btn-secondary" (click)="estrenoDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="field_personajes">Personajes</label>
+          <select class="form-control" id="field_personajes" data-cy="personajes" multiple name="personajes" formControlName="personajes">
+            <option
+              [ngValue]="getSelectedPersonaje(personajeOption, editForm.get('personajes')!.value)"
+              *ngFor="let personajeOption of personajesSharedCollection; trackBy: trackPersonajeById"
+            >
+              {{ personajeOption.nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

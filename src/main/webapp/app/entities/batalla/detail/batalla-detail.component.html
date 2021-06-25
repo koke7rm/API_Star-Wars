@@ -1,0 +1,61 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <div *ngIf="batalla">
+      <h2 data-cy="batallaDetailsHeading"><span>Batalla</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span>ID</span></dt>
+        <dd>
+          <span>{{ batalla.id }}</span>
+        </dd>
+        <dt><span>Nombre</span></dt>
+        <dd>
+          <span>{{ batalla.nombre }}</span>
+        </dd>
+        <dt><span>Planeta</span></dt>
+        <dd>
+          <span>{{ batalla.planeta }}</span>
+        </dd>
+        <dt><span>Involucrados</span></dt>
+        <dd>
+          <span *ngFor="let involucrados of batalla.involucrados; let last = last">
+            <a [routerLink]="['/personaje', involucrados?.id, 'view']">{{ involucrados.nombre }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span>Pelicula</span></dt>
+        <dd>
+          <div *ngIf="batalla.pelicula">
+            <a [routerLink]="['/pelicula', batalla.pelicula?.id, 'view']">{{ batalla.pelicula?.titulo }}</a>
+          </div>
+        </dd>
+        <dt><span>Ganador</span></dt>
+        <dd>
+          <div *ngIf="batalla.ganador">
+            <a [routerLink]="['/bando', batalla.ganador?.id, 'view']">{{ batalla.ganador?.nombre }}</a>
+          </div>
+        </dd>
+        <dt><span>Perdedor</span></dt>
+        <dd>
+          <div *ngIf="batalla.perdedor">
+            <a [routerLink]="['/bando', batalla.perdedor?.id, 'view']">{{ batalla.perdedor?.nombre }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span>Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/batalla', batalla.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span>Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

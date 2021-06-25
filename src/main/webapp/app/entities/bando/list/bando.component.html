@@ -1,0 +1,81 @@
+<div>
+  <h2 id="page-heading" data-cy="BandoHeading">
+    <span>Bandos</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info mr-2" (click)="loadAll()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span>Refresh List</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-bando"
+        [routerLink]="['/bando/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span> Create a new Bando </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="bandos?.length === 0">
+    <span>No bandos found</span>
+  </div>
+
+  <div class="table-responsive" id="entities" *ngIf="bandos && bandos.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr>
+          <th scope="col"><span>ID</span></th>
+          <th scope="col"><span>Nombre</span></th>
+          <th scope="col"><span>Logo</span></th>
+          <th scope="col"><span>Integrantes</span></th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let bando of bandos; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/bando', bando.id, 'view']">{{ bando.id }}</a>
+          </td>
+          <td>{{ bando.nombre }}</td>
+          <td>
+            <a *ngIf="bando.logo" (click)="openFile(bando.logo, bando.logoContentType)">
+              <img [src]="'data:' + bando.logoContentType + ';base64,' + bando.logo" style="max-height: 30px" alt="bando image" />
+            </a>
+            <span *ngIf="bando.logo">{{ bando.logoContentType }}, {{ byteSize(bando.logo) }}</span>
+          </td>
+          <td>
+            <div *ngIf="bando.integrantes">
+              <a [routerLink]="['/personaje', bando.integrantes?.id, 'view']">{{ bando.integrantes?.nombre }}</a>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <button type="submit" [routerLink]="['/bando', bando.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline">View</span>
+              </button>
+
+              <button type="submit" [routerLink]="['/bando', bando.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(bando)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,101 @@
+<div class="row justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-batalla-heading" data-cy="BatallaCreateUpdateHeading">Create or edit a Batalla</h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="form-group" [hidden]="editForm.get('id')!.value == null">
+          <label class="form-control-label" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_nombre">Nombre</label>
+          <input type="text" class="form-control" name="nombre" id="field_nombre" data-cy="nombre" formControlName="nombre" />
+          <div *ngIf="editForm.get('nombre')!.invalid && (editForm.get('nombre')!.dirty || editForm.get('nombre')!.touched)"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_planeta">Planeta</label>
+          <input type="text" class="form-control" name="planeta" id="field_planeta" data-cy="planeta" formControlName="planeta" />
+        </div>
+
+        <div class="form-group">
+          <label for="field_involucrados">Involucrados</label>
+          <select
+            class="form-control"
+            id="field_involucrados"
+            data-cy="involucrados"
+            multiple
+            name="involucrados"
+            formControlName="involucrados"
+          >
+            <option
+              [ngValue]="getSelectedPersonaje(personajeOption, editForm.get('involucrados')!.value)"
+              *ngFor="let personajeOption of personajesSharedCollection; trackBy: trackPersonajeById"
+            >
+              {{ personajeOption.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_pelicula">Pelicula</label>
+          <select class="form-control" id="field_pelicula" data-cy="pelicula" name="pelicula" formControlName="pelicula">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="peliculaOption.id === editForm.get('pelicula')!.value?.id ? editForm.get('pelicula')!.value : peliculaOption"
+              *ngFor="let peliculaOption of peliculasSharedCollection; trackBy: trackPeliculaById"
+            >
+              {{ peliculaOption.titulo }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_ganador">Ganador</label>
+          <select class="form-control" id="field_ganador" data-cy="ganador" name="ganador" formControlName="ganador">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="bandoOption.id === editForm.get('ganador')!.value?.id ? editForm.get('ganador')!.value : bandoOption"
+              *ngFor="let bandoOption of bandosSharedCollection; trackBy: trackBandoById"
+            >
+              {{ bandoOption.nombre }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-control-label" for="field_perdedor">Perdedor</label>
+          <select class="form-control" id="field_perdedor" data-cy="perdedor" name="perdedor" formControlName="perdedor">
+            <option [ngValue]="null"></option>
+            <option
+              [ngValue]="bandoOption.id === editForm.get('perdedor')!.value?.id ? editForm.get('perdedor')!.value : bandoOption"
+              *ngFor="let bandoOption of bandosSharedCollection; trackBy: trackBandoById"
+            >
+              {{ bandoOption.nombre }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span>Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span>Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

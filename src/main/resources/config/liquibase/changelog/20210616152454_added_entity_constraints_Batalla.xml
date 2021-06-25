@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd">
+    <!--
+        Added the constraints for entity Batalla.
+    -->
+    <changeSet id="20210616152454-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="batalla_id"
+                                 baseTableName="rel_batalla__involucrados"
+                                 constraintName="fk_rel_batalla__involucrados__batalla_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="batalla"/>
+
+        <addForeignKeyConstraint baseColumnNames="involucrados_id"
+                                 baseTableName="rel_batalla__involucrados"
+                                 constraintName="fk_rel_batalla__involucrados__involucrados_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="personaje"/>
+
+        <addForeignKeyConstraint baseColumnNames="pelicula_id"
+                                 baseTableName="batalla"
+                                 constraintName="fk_batalla__pelicula_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="pelicula"/>
+
+        <addForeignKeyConstraint baseColumnNames="ganador_id"
+                                 baseTableName="batalla"
+                                 constraintName="fk_batalla__ganador_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bando"/>
+
+        <addForeignKeyConstraint baseColumnNames="perdedor_id"
+                                 baseTableName="batalla"
+                                 constraintName="fk_batalla__perdedor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="bando"/>
+    </changeSet>
+</databaseChangeLog>
